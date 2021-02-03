@@ -1,5 +1,10 @@
 package sample;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
 import sample.dataModel.ToDoItems;
 
 import java.time.LocalDate;
@@ -10,6 +15,12 @@ import java.util.List;
 public class Controller {
 
     private List<ToDoItems> itemsList;
+    @FXML
+    private ListView toDoListView;
+    @FXML
+    private TextArea detailsOfItem;
+    @FXML
+    private Label dueDeadline;
 
     public void initialize(){
         ToDoItems list1 = new ToDoItems("Mail birthday card", "Buy the birthday card for Manan",
@@ -29,5 +40,19 @@ public class Controller {
         itemsList.add(list3);
         itemsList.add(list4);
         itemsList.add(list5);
+
+        toDoListView.getItems().addAll(itemsList);
+        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        toDoListView.getSelectionModel().selectFirst();
+
+        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
+        detailsOfItem.setText(item.getDetails());
+        dueDeadline.setText(item.getDueDate().toString());
+    }
+
+    public void handleMouseClick(){
+        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
+        detailsOfItem.setText(item.getDetails());
+        dueDeadline.setText(item.getDueDate().toString());
     }
 }

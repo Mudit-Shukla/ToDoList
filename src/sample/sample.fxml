@@ -5,14 +5,32 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextArea?>
 <BorderPane fx:controller="sample.Controller"
             xmlns:fx="http://javafx.com/fxml" >
     <left>
-        <ListView>
+        <ListView fx:id = "toDoListView" onMouseClicked="#handleMouseClick">
 
         </ListView>
     </left>
     <center>
-
+        <VBox>
+            <TextArea fx:id="detailsOfItem" VBox.vgrow="ALWAYS"/>
+            <HBox>
+                <Label text="Due :" style="-fx-background-color: white">
+                    <font>
+                        <Font name="Times New Roman bold" size="20"/>
+                    </font>
+                </Label>
+                <Label fx:id="dueDeadline" style="-fx-background-color: white">
+                    <font>
+                        <Font name="Times New Roman bold" size="20"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
     </center>
 </BorderPane>
