@@ -1,5 +1,9 @@
 package sample;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,7 +20,7 @@ public class Controller {
 
     private List<ToDoItems> itemsList;
     @FXML
-    private ListView toDoListView;
+    private ListView<ToDoItems> toDoListView;
     @FXML
     private TextArea detailsOfItem;
     @FXML
@@ -41,9 +45,22 @@ public class Controller {
         itemsList.add(list4);
         itemsList.add(list5);
 
+
+
         toDoListView.getItems().addAll(itemsList);
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
+
+        toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ToDoItems>() {
+            @Override
+            public void changed(ObservableValue<? extends ToDoItems> observableValue, ToDoItems selectionMode, ToDoItems t1) {
+                if(t1 != null){
+                    ToDoItems item = toDoListView.getSelectionModel().getSelectedItem();
+                    detailsOfItem.setText(item.getDetails());
+                    dueDeadline.setText(item.getDueDate().toString());
+                }
+            }
+        });
 
         ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
         detailsOfItem.setText(item.getDetails());
@@ -51,7 +68,7 @@ public class Controller {
     }
 
     public void handleMouseClick(){
-        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
+        ToDoItems item = toDoListView.getSelectionModel().getSelectedItem();
         detailsOfItem.setText(item.getDetails());
         dueDeadline.setText(item.getDueDate().toString());
     }
