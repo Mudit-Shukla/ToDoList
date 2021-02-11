@@ -13,6 +13,7 @@ import sample.dataModel.ToDoItems;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,25 +47,25 @@ public class Controller {
         itemsList.add(list5);
 
 
-
-        toDoListView.getItems().addAll(itemsList);
-        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        toDoListView.getSelectionModel().selectFirst();
-
         toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ToDoItems>() {
             @Override
             public void changed(ObservableValue<? extends ToDoItems> observableValue, ToDoItems selectionMode, ToDoItems t1) {
                 if(t1 != null){
                     ToDoItems item = toDoListView.getSelectionModel().getSelectedItem();
                     detailsOfItem.setText(item.getDetails());
-                    dueDeadline.setText(item.getDueDate().toString());
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMMM d yyyy");
+                    dueDeadline.setText(dtf.format(item.getDueDate()));
                 }
             }
         });
 
-        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
-        detailsOfItem.setText(item.getDetails());
-        dueDeadline.setText(item.getDueDate().toString());
+        toDoListView.getItems().addAll(itemsList);
+        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        toDoListView.getSelectionModel().selectFirst();
+
+//        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
+//        detailsOfItem.setText(item.getDetails());
+//        dueDeadline.setText(item.getDueDate().toString());
     }
 
     public void handleMouseClick(){
