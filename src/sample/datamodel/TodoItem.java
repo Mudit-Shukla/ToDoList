@@ -1,16 +1,16 @@
-package sample.dataModel;
+package sample.datamodel;
 
 import java.time.LocalDate;
 
-public class ToDoItems {
-    String shortDescription;
-    String details;
-    LocalDate dueDate;
+public class TodoItem {
+    private String shortDescription;
+    private String details;
+    private LocalDate deadline;
 
-    public ToDoItems(String shortDescription, String details, LocalDate dueDate) {
+    public TodoItem(String shortDescription, String details, LocalDate deadline) {
         this.shortDescription = shortDescription;
         this.details = details;
-        this.dueDate = dueDate;
+        this.deadline = deadline;
     }
 
     public String getShortDescription() {
@@ -29,16 +29,15 @@ public class ToDoItems {
         this.details = details;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getDeadline() {
+        return deadline;
     }
 
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
-    @Override
-    public String toString() {
+    public String toString(){
         return shortDescription;
     }
 }

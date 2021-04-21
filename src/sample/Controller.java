@@ -1,76 +1,67 @@
 package sample;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
-import sample.dataModel.ToDoItems;
+import javafx.scene.control.*;
+import sample.datamodel.ToDoData;
+import sample.datamodel.TodoItem;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Controller {
 
-    private List<ToDoItems> itemsList;
+    List<TodoItem> todoItems;
     @FXML
-    private ListView<ToDoItems> toDoListView;
+    private ListView<TodoItem> toDoListView;
     @FXML
-    private TextArea detailsOfItem;
+    private TextArea descriptionOfItem;
     @FXML
-    private Label dueDeadline;
+    private Label deadline;
 
-    public void initialize(){
-        ToDoItems list1 = new ToDoItems("Mail birthday card", "Buy the birthday card for Manan",
-                LocalDate.of(2021, Month.JANUARY,12));
-        ToDoItems list2 = new ToDoItems("Visit to the doctor", "Take all the require documents",
-                LocalDate.of(2021, Month.FEBRUARY,12));
-        ToDoItems list3 = new ToDoItems("Bring the grocery", "Buy 5kg rice and flour for home",
-                LocalDate.of(2021, Month.MARCH,12));
-        ToDoItems list4 = new ToDoItems("Deposit fees", "Deposit the fees in the bank",
-                LocalDate.of(2021, Month.APRIL,12));
-        ToDoItems list5 = new ToDoItems("Pick the sister from station", "She is comming on the occasion",
-                LocalDate.of(2021, Month.MAY,12));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM-dd-yyyy");
 
-        itemsList = new ArrayList<>();
-        itemsList.add(list1);
-        itemsList.add(list2);
-        itemsList.add(list3);
-        itemsList.add(list4);
-        itemsList.add(list5);
+    public void initialize() {
+        TodoItem item1 = new TodoItem("item1", "details of item1", LocalDate.of(2021, Month.MARCH, 20));
+        TodoItem item2 = new TodoItem("item2", "details of item2", LocalDate.of(2021, Month.APRIL, 20));
+        TodoItem item3 = new TodoItem("item3", "details of item3", LocalDate.of(2021, Month.MAY, 20));
+        TodoItem item4 = new TodoItem("item4", "details of item4", LocalDate.of(2021, Month.JULY, 20));
 
+        todoItems = new ArrayList<TodoItem>();
+        todoItems.add(item1);
+        todoItems.add(item2);
+        todoItems.add(item3);
+        todoItems.add(item4);
 
-        toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ToDoItems>() {
+        ToDoData.getInstance().setTodoItems(todoItems);
+
+        toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
             @Override
-            public void changed(ObservableValue<? extends ToDoItems> observableValue, ToDoItems selectionMode, ToDoItems t1) {
-                if(t1 != null){
-                    ToDoItems item = toDoListView.getSelectionModel().getSelectedItem();
-                    detailsOfItem.setText(item.getDetails());
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMMM d yyyy");
-                    dueDeadline.setText(dtf.format(item.getDueDate()));
+            public void changed(ObservableValue<? extends TodoItem> observableValue, TodoItem todoItem, TodoItem t1) {
+                if (t1 != null) {
+                    TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
+                    descriptionOfItem.setText(item.getDetails());
+                    deadline.setText(item.getDeadline().format(formatter));
                 }
             }
         });
 
-        toDoListView.getItems().addAll(itemsList);
+        toDoListView.getItems().setAll(todoItems);
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
-
-//        ToDoItems item = (ToDoItems) toDoListView.getSelectionModel().getSelectedItem();
-//        detailsOfItem.setText(item.getDetails());
-//        dueDeadline.setText(item.getDueDate().toString());
     }
 
+    @FXML
     public void handleMouseClick(){
-        ToDoItems item = toDoListView.getSelectionModel().getSelectedItem();
-        detailsOfItem.setText(item.getDetails());
-        dueDeadline.setText(item.getDueDate().toString());
+        TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
+        descriptionOfItem.setText(item.getDetails());
+        deadline.setText(item.getDeadline().toString());
+
     }
+
 }
