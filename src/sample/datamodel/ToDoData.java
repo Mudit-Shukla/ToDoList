@@ -19,21 +19,21 @@ public class ToDoData {
     private List<TodoItem> todoItems;
     private DateTimeFormatter formatter;
 
-    public static ToDoData getInstance(){
+    public static ToDoData getInstance() {
         return instance;
     }
 
-    private ToDoData(){
-        formatter = DateTimeFormatter.ofPattern("dd-MM--yyyy");
+    private ToDoData() {
+        formatter = DateTimeFormatter.ofPattern("MMMM-dd--yyyy");
     }
 
     public List<TodoItem> getTodoItems() {
         return todoItems;
     }
 
-    public void setTodoItems(List<TodoItem> todoItems) {
-        this.todoItems = todoItems;
-    }
+//    public void setTodoItems(List<TodoItem> todoItems) {
+//        this.todoItems = todoItems;
+//    }
 
     public void loadToDoItems() throws IOException {
         todoItems = FXCollections.observableArrayList();
@@ -42,8 +42,8 @@ public class ToDoData {
 
         String input;
 
-        try{
-            while ((input = br.readLine()) != null){
+        try {
+            while ((input = br.readLine()) != null) {
                 String[] itemPieces = input.split("\t");
                 String shortDescription = itemPieces[0];
                 String details = itemPieces[1];
@@ -53,27 +53,27 @@ public class ToDoData {
                 TodoItem todoItem = new TodoItem(shortDescription, details, date);
                 todoItems.add(todoItem);
             }
-        }finally {
-            if(br != null)
+        } finally {
+            if (br != null)
                 br.close();
         }
     }
 
-    public void storeToDoItem() throws IOException{
+    public void storeToDoItem() throws IOException {
         Path path = Paths.get(filename);
         BufferedWriter bw = Files.newBufferedWriter(path);
-        try{
-        Iterator<TodoItem> iterator = todoItems.iterator();
-        while (iterator.hasNext()){
-            TodoItem item = iterator.next();
-            bw.write(String.format("%s\t%s\t%s", item.getShortDescription(),
-                    item.getDetails(),
-                    item.getDeadline().format(formatter)));
+        try {
+            Iterator<TodoItem> iterator = todoItems.iterator();
+            while (iterator.hasNext()) {
+                TodoItem item = iterator.next();
+                bw.write(String.format("%s\t%s\t%s ", item.getShortDescription(),
+                        item.getDetails(),
+                        item.getDeadline().format(formatter)));
 
-            bw.write("\n");
+                bw.write("\n");
             }
-        }finally {
-            if(bw != null)
+        } finally {
+            if (bw != null)
                 bw.close();
         }
     }

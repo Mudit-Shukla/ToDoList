@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.datamodel.ToDoData;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
     @Override
@@ -23,7 +25,20 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
-        ToDoData.getInstance().storeToDoItem();
+    public void init() throws IOException {
+        try {
+            ToDoData.getInstance().loadToDoItems();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void stop() throws IOException {
+        try {
+            ToDoData.getInstance().storeToDoItem();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 }
