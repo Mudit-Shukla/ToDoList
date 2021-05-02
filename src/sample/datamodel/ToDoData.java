@@ -14,67 +14,73 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ToDoData {
+
     private static ToDoData instance = new ToDoData();
-    private static String filename = "ToDoListItems.txt";
+    private static String fileName = "TodolistItems.txt";
+
     private List<TodoItem> todoItems;
     private DateTimeFormatter formatter;
 
-    public static ToDoData getInstance() {
+    public static ToDoData getInstance(){
         return instance;
     }
 
-    private ToDoData() {
-        formatter = DateTimeFormatter.ofPattern("MMMM-dd--yyyy");
+    private ToDoData(){
+        formatter = DateTimeFormatter.ofPattern("MMMM-dd-yyyy");
     }
 
-    public List<TodoItem> getTodoItems() {
+    public void setTodoItems(List<TodoItem> todoItems){
+        this.todoItems = todoItems;
+    }
+
+    public List<TodoItem> getTodoItems(){
         return todoItems;
     }
 
-//    public void setTodoItems(List<TodoItem> todoItems) {
-//        this.todoItems = todoItems;
-//    }
+    public void loadToDoItems() throws IOException{
 
-    public void loadToDoItems() throws IOException {
         todoItems = FXCollections.observableArrayList();
-        Path path = Paths.get(filename);
+        Path path = Paths.get(fileName);
         BufferedReader br = Files.newBufferedReader(path);
 
         String input;
-
-        try {
-            while ((input = br.readLine()) != null) {
-                String[] itemPieces = input.split("\t");
-                String shortDescription = itemPieces[0];
-                String details = itemPieces[1];
-                String deadline = itemPieces[2];
+        try{
+            while ((input = br.readLine()) != null){
+                String[] item = input.split("\t");
+                String shortDescription = item[0];
+                String detailDescription = item[1];
+                String deadline = item[2];
 
                 LocalDate date = LocalDate.parse(deadline, formatter);
-                TodoItem todoItem = new TodoItem(shortDescription, details, date);
+                TodoItem todoItem = new TodoItem(shortDescription, detailDescription, date);
                 todoItems.add(todoItem);
             }
-        } finally {
-            if (br != null)
+
+        }finally {
+            if(br != null)
                 br.close();
         }
+
     }
 
-    public void storeToDoItem() throws IOException {
-        Path path = Paths.get(filename);
+    public void storeToDoItems() throws IOException{
+
+        Path path = Paths.get(fileName);
         BufferedWriter bw = Files.newBufferedWriter(path);
-        try {
+        try{
             Iterator<TodoItem> iterator = todoItems.iterator();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext()){
                 TodoItem item = iterator.next();
-                bw.write(String.format("%s\t%s\t%s ", item.getShortDescription(),
+                bw.write(String.format("%s\t%s\t%s",
+                        item.getShortDescription(),
                         item.getDetails(),
                         item.getDeadline().format(formatter)));
-
-                bw.write("\n");
+                bw.newLine();
             }
-        } finally {
-            if (bw != null)
+        }finally {
+            if(bw != null)
                 bw.close();
         }
+
     }
 }

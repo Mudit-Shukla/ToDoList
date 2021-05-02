@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
 import sample.datamodel.ToDoData;
 import sample.datamodel.TodoItem;
 
@@ -39,8 +40,7 @@ public class Controller {
 //        todoItems.add(item2);
 //        todoItems.add(item3);
 //        todoItems.add(item4);
-
-
+//
 //        ToDoData.getInstance().setTodoItems(todoItems);
 
         toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {

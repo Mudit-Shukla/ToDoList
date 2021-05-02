@@ -24,20 +24,21 @@ public class Main extends Application {
         launch(args);
     }
 
+
     @Override
-    public void init() throws IOException {
+    public void stop() throws Exception {
         try {
-            ToDoData.getInstance().loadToDoItems();
-        }catch (IOException e){
+            ToDoData.getInstance().storeToDoItems();
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     @Override
-    public void stop() throws IOException {
-        try {
-            ToDoData.getInstance().storeToDoItem();
-        }catch (IOException e){
+    public void init() throws Exception {
+        try{
+            ToDoData.getInstance().loadToDoItems();
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
