@@ -3,16 +3,21 @@ package sample;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.BorderPane;
 import sample.datamodel.ToDoData;
 import sample.datamodel.TodoItem;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class Controller {
@@ -24,6 +29,8 @@ public class Controller {
     private TextArea descriptionOfItem;
     @FXML
     private Label deadline;
+    @FXML
+    private BorderPane mainBorderPane;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM-dd-yyyy");
 
@@ -57,6 +64,32 @@ public class Controller {
         toDoListView.getItems().setAll(ToDoData.getInstance().getTodoItems());
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
+
+    }
+
+    @FXML
+    public void showNewItemDialog(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("todolistDialogPane.fxml"));
+            dialog.getDialogPane().setContent(root);
+
+        }catch (Exception e){
+            System.out.println("Could not load the New item dialog window");
+            e.printStackTrace();
+        }
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            System.out.println("Ok pressed");
+        }else{
+            System.out.println("Cancel presses");
+        }
+
     }
 
     @FXML
