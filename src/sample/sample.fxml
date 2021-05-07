@@ -35,7 +35,7 @@
     </left>
     <center>
         <VBox style="-fx-background-color: white">
-            <TextArea VBox.vgrow="ALWAYS" fx:id="descriptionOfItem"/>
+            <TextArea VBox.vgrow="ALWAYS" fx:id="descriptionOfItem" WrapText = "true"/>
             <HBox BorderPane.alignment="BOTTOM_LEFT">
                 <Label text="Due Date : ">
                     <font>

@@ -61,7 +61,7 @@ public class Controller {
             }
         });
 
-        toDoListView.getItems().setAll(ToDoData.getInstance().getTodoItems());
+        toDoListView.setItems(ToDoData.getInstance().getTodoItems());
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
 
@@ -71,9 +71,11 @@ public class Controller {
     public void showNewItemDialog(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("todolistDialogPane.fxml"));
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("todolistDialogPane.fxml"));
-            dialog.getDialogPane().setContent(root);
+            dialog.getDialogPane().setContent(loader.load());
 
         }catch (Exception e){
             System.out.println("Could not load the New item dialog window");
@@ -85,7 +87,10 @@ public class Controller {
 
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK){
-            System.out.println("Ok pressed");
+            ToDoListController controller = loader.getController();
+            TodoItem item = controller.processResult();
+//            toDoListView.getItems().setAll(ToDoData.getInstance().getTodoItems());
+            toDoListView.getSelectionModel().select(item);
         }else{
             System.out.println("Cancel presses");
         }
