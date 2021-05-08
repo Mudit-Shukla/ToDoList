@@ -2,6 +2,8 @@ package sample;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,6 +35,8 @@ public class Controller {
     private Label deadline;
     @FXML
     private BorderPane mainBorderPane;
+    @FXML
+    private ContextMenu contextMenu;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM-dd-yyyy");
 
@@ -51,6 +55,18 @@ public class Controller {
 //        todoItems.add(item4);
 //
 //        ToDoData.getInstance().setTodoItems(todoItems);
+
+        contextMenu = new ContextMenu();
+        MenuItem menuItem = new MenuItem("Delete");
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
+                deleteItem(item);
+            }
+        });
+
+        contextMenu.getItems().setAll(menuItem);
 
         toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
             @Override
@@ -83,6 +99,12 @@ public class Controller {
                         }
                     }
                 };
+                cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                  if(isNowEmpty)
+                      cell.setContextMenu(null);
+                  else
+                      cell.setContextMenu(contextMenu);
+                });
                 return cell;
             }
         });
@@ -124,7 +146,18 @@ public class Controller {
         TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
         descriptionOfItem.setText(item.getDetails());
         deadline.setText(item.getDeadline().toString());
-
     }
+
+    @FXML
+    public void deleteItem(TodoItem item){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete todo item");
+        alert.setContentText("Are you sure to delete : " + item.getShortDescription());
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.isPresent() && result.get().equals(ButtonType.OK))
+            ToDoData.getInstance().deleteItem(item);
+    }
+
 
 }
