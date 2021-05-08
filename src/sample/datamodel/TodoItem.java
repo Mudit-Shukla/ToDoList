@@ -37,7 +37,7 @@ public class TodoItem {
         this.deadline = deadline;
     }
 
-    public String toString() {
-        return shortDescription;
-    }
+//    public String toString() {
+//        return shortDescription;
+//    }
 }

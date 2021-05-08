@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import sample.datamodel.ToDoData;
 import sample.datamodel.TodoItem;
 
@@ -64,6 +66,26 @@ public class Controller {
         toDoListView.setItems(ToDoData.getInstance().getTodoItems());
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
+
+        toDoListView.setCellFactory(new Callback<ListView<TodoItem>, ListCell<TodoItem>>() {
+            @Override
+            public ListCell<TodoItem> call(ListView<TodoItem> todoItemListView) {
+                ListCell<TodoItem> cell = new ListCell<>(){
+                    @Override
+                    protected void updateItem(TodoItem todoItem, boolean empty) {
+                        super.updateItem(todoItem, empty);
+                        if (empty)
+                            setText(null);
+                        else {
+                            setText(todoItem.getShortDescription());
+                            if(todoItem.getDeadline().equals(LocalDate.now()))
+                                setTextFill(Color.RED);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
 
     }
 
