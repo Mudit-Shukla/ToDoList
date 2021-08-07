@@ -15,18 +15,32 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="mainBorderPane" fx:controller="sample.Controller"
             xmlns:fx="http://javafx.com/fxml" >
     <top>
-        <MenuBar>
-            <Menu text="File">
-               <items>
-                   <MenuItem text="New File" onAction="#showNewItemDialog"/>
-                   <SeparatorMenuItem/>
-                   <MenuItem text="Exit"/>
-               </items>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="New File" onAction="#showNewItemDialog"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="Exit"/>
+                    </items>
+                </Menu>
+            </MenuBar>
+        </VBox>
+        <ToolBar>
+            <Button text = "New..." onAction="#showNewItemDialog" focusTraversable="false">
+                <graphic>
+                    <ImageView>
+                        <Image url = "@/toolbarButtonGraphics/general/New24.gif"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </ToolBar>
     </top>
     <left>
         <ListView fx:id="toDoListView" onKeyPressed="#handleKeyPressed">
