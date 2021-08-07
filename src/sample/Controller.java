@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
@@ -115,7 +117,6 @@ public class Controller {
     public void showNewItemDialog(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("todolistDialogPane.fxml"));
         try{
@@ -146,6 +147,14 @@ public class Controller {
         TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
         descriptionOfItem.setText(item.getDetails());
         deadline.setText(item.getDeadline().toString());
+    }
+
+    @FXML
+    public void handleKeyPressed(KeyEvent event){
+        if(event.getCode().equals(KeyCode.DELETE)){
+            TodoItem item = toDoListView.getSelectionModel().getSelectedItem();
+            deleteItem(item);
+        }
     }
 
     @FXML
